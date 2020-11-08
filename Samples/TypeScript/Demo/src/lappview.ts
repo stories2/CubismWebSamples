@@ -133,11 +133,11 @@ export class LAppView {
       this._back = new LAppSprite(x, y, fwidth, fheight, textureInfo.id);
     };
 
-    textureManager.createTextureFromPngFile(
-      resourcesPath + imageName,
-      false,
-      initBackGroundTexture
-    );
+    // textureManager.createTextureFromPngFile(
+    //   resourcesPath + imageName,
+    //   false,
+    //   initBackGroundTexture
+    // );
 
     // 歯車画像初期化
     imageName = LAppDefine.GearImageName;

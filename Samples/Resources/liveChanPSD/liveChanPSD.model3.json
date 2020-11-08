@@ -1,0 +1,10 @@
+{
+	"Version": 3,
+	"FileReferences": {
+		"Moc": "liveChanPSD.moc3",
+		"Textures": [
+			"liveChanPSD.8192/texture_00.png"
+		],
+		"DisplayInfo": "liveChanPSD.cdi3.json"
+	}
+}

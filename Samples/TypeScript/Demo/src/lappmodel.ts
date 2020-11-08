@@ -456,6 +456,7 @@ export class LAppModel extends CubismUserModel {
     // モーションによるパラメータ更新の有無
     let motionUpdated = false;
 
+    // console.log('always update?');
     //--------------------------------------------------------------------------
     this._model.loadParameters(); // 前回セーブされた状態をロード
     if (this._motionManager.isFinished()) {
@@ -487,8 +488,27 @@ export class LAppModel extends CubismUserModel {
 
     // ドラッグによる変化
     // ドラッグによる顔の向きの調整
-    this._model.addParameterValueById(this._idParamAngleX, this._dragX * 30); // -30から30の値を加える
-    this._model.addParameterValueById(this._idParamAngleY, this._dragY * 30);
+    this._model.addParameterValueById(this._idParamHeadX, this._dragX * 1);
+    this._model.addParameterValueById(this._idParamHeadY, this._dragY * 1);
+
+    this._model.addParameterValueById(this._idParamHairX, this._dragX * 1);
+    this._model.addParameterValueById(this._idParamHairY, this._dragY * 1);
+
+    this._model.addParameterValueById(this._idParamBHairX, this._dragX * 1);
+    this._model.addParameterValueById(this._idParamBHairY, this._dragY * 1);
+
+    this._model.addParameterValueById(this._idParamLHairX, this._dragX * 1);
+    this._model.addParameterValueById(this._idParamLHairY, this._dragY * 1);
+
+    this._model.addParameterValueById(this._idParamRHairX, this._dragX * 1); // -30から30の値を加える
+    this._model.addParameterValueById(this._idParamRHairY, this._dragY * 1);
+
+    this._model.addParameterValueById(this._idParamLLHairX, this._dragX * 1);
+    this._model.addParameterValueById(this._idParamLLHairY, this._dragY * 1);
+
+    this._model.addParameterValueById(this._idParamRRHairX, this._dragX * 1); // -30から30の値を加える
+    this._model.addParameterValueById(this._idParamRRHairY, this._dragY * 1);
+
     this._model.addParameterValueById(
       this._idParamAngleZ,
       this._dragX * this._dragY * -30
@@ -846,6 +866,48 @@ export class LAppModel extends CubismUserModel {
     this._idParamBodyAngleX = CubismFramework.getIdManager().getId(
       CubismDefaultParameterId.ParamBodyAngleX
     );
+    this._idParamHeadX = CubismFramework.getIdManager().getId(
+      'head_x'
+    );
+    this._idParamHeadY = CubismFramework.getIdManager().getId(
+      'head_y'
+    );
+    this._idParamHairX = CubismFramework.getIdManager().getId(
+      'hair_x'
+    );
+    this._idParamHairY = CubismFramework.getIdManager().getId(
+      'hair_y'
+    );
+    this._idParamBHairX = CubismFramework.getIdManager().getId(
+      'bhair_x'
+    );
+    this._idParamBHairY = CubismFramework.getIdManager().getId(
+      'bhair_y'
+    );
+    this._idParamLHairX = CubismFramework.getIdManager().getId(
+      'lhair_x'
+    );
+    this._idParamLHairY = CubismFramework.getIdManager().getId(
+      'lhair_y'
+    );
+    this._idParamRHairX = CubismFramework.getIdManager().getId(
+      'rhair_x'
+    );
+    this._idParamRHairY = CubismFramework.getIdManager().getId(
+      'rhair_y'
+    );
+    this._idParamLLHairX = CubismFramework.getIdManager().getId(
+      'llhair_x'
+    );
+    this._idParamLLHairY = CubismFramework.getIdManager().getId(
+      'llhair_y'
+    );
+    this._idParamRRHairX = CubismFramework.getIdManager().getId(
+      'rrhair_x'
+    );
+    this._idParamRRHairY = CubismFramework.getIdManager().getId(
+      'rrhair_y'
+    );
 
     this._state = LoadStep.LoadAssets;
     this._expressionCount = 0;
@@ -873,6 +935,21 @@ export class LAppModel extends CubismUserModel {
   _idParamEyeBallX: CubismIdHandle; // パラメータID: ParamEyeBallX
   _idParamEyeBallY: CubismIdHandle; // パラメータID: ParamEyeBAllY
   _idParamBodyAngleX: CubismIdHandle; // パラメータID: ParamBodyAngleX
+
+  _idParamHeadX: CubismIdHandle; // ID: head_x
+  _idParamHeadY: CubismIdHandle; // ID: head_y
+  _idParamHairX: CubismIdHandle; // ID: hair_x
+  _idParamHairY: CubismIdHandle; // ID: hair_y
+  _idParamBHairX: CubismIdHandle; // ID: bhair_x
+  _idParamBHairY: CubismIdHandle; // ID: bhair_y
+  _idParamLHairX: CubismIdHandle; // ID: lhair_x
+  _idParamLHairY: CubismIdHandle; // ID: lhair_y
+  _idParamRHairX: CubismIdHandle; // ID: rhair_x
+  _idParamRHairY: CubismIdHandle; // ID: rhair_y
+  _idParamLLHairX: CubismIdHandle; // ID: llhair_x
+  _idParamLLHairY: CubismIdHandle; // ID: llhair_y
+  _idParamRRHairX: CubismIdHandle; // ID: rrhair_x
+  _idParamRRHairY: CubismIdHandle; // ID: rrhair_y
 
   _state: number; // 現在のステータス管理用
   _expressionCount: number; // 表情データカウント

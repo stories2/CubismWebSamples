@@ -1,0 +1,107 @@
+{
+	"Version": 3,
+	"Parameters": [
+		{
+			"Id": "head_x",
+			"GroupId": "",
+			"Name": "head_x"
+		},
+		{
+			"Id": "head_y",
+			"GroupId": "",
+			"Name": "head_y"
+		},
+		{
+			"Id": "hair_x",
+			"GroupId": "",
+			"Name": "hair_x"
+		},
+		{
+			"Id": "hair_y",
+			"GroupId": "",
+			"Name": "hair_y"
+		},
+		{
+			"Id": "bhair_x",
+			"GroupId": "",
+			"Name": "bhair_x"
+		},
+		{
+			"Id": "bhair_y",
+			"GroupId": "",
+			"Name": "bhair_y"
+		},
+		{
+			"Id": "lhair_x",
+			"GroupId": "",
+			"Name": "lhair_x"
+		},
+		{
+			"Id": "lhair_y",
+			"GroupId": "",
+			"Name": "lhair_y"
+		},
+		{
+			"Id": "rhair_x",
+			"GroupId": "",
+			"Name": "rhair_x"
+		},
+		{
+			"Id": "rhair_y",
+			"GroupId": "",
+			"Name": "rhair_y"
+		},
+		{
+			"Id": "llhair_x",
+			"GroupId": "",
+			"Name": "llhair_x"
+		},
+		{
+			"Id": "llhair_y",
+			"GroupId": "",
+			"Name": "llhair_y"
+		},
+		{
+			"Id": "rrhair_x",
+			"GroupId": "",
+			"Name": "rrhair_x"
+		},
+		{
+			"Id": "rrhair_y",
+			"GroupId": "",
+			"Name": "rrhair_y"
+		}
+	],
+	"ParameterGroups": [],
+	"Parts": [],
+	"CombinedParameters": [
+		[
+			"head_x",
+			"head_y"
+		],
+		[
+			"hair_x",
+			"hair_y"
+		],
+		[
+			"bhair_x",
+			"bhair_y"
+		],
+		[
+			"lhair_x",
+			"lhair_y"
+		],
+		[
+			"rhair_x",
+			"rhair_y"
+		],
+		[
+			"llhair_x",
+			"llhair_y"
+		],
+		[
+			"rrhair_x",
+			"rrhair_y"
+		]
+	]
+}
