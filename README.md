@@ -4,6 +4,11 @@ Live2D Cubism 4 Editor で出力したモデルを表示するアプリケーシ
 
 Cubism Web Framework および Live2D Cubism Core と組み合わせて使用します。
 
+## What i changed
+- Create my own character model and run with custom param
+
+![result](sample.gif)
+
 
 ## ライセンス
 
