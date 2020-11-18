@@ -1,0 +1,11 @@
+
+version: '3.7'
+
+services:
+  server:
+    build: ./
+    image: socket-app
+    restart: always
+    container_name: socket_node_app
+    ports:
+      - "5252:5252"
