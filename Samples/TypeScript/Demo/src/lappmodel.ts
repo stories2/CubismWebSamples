@@ -48,6 +48,8 @@ import { TextureInfo } from './lapptexturemanager';
 import * as LAppDefine from './lappdefine';
 import 'whatwg-fetch';
 
+import io from 'socket.io-client';
+
 enum LoadStep {
   LoadAssets,
   LoadModel,
@@ -829,6 +831,24 @@ export class LAppModel extends CubismUserModel {
     }
   }
 
+  onSocketDataRecv(data) {
+    console.log('[lappmodel] [onSocketDataRecv] data: ', data);
+  }
+
+  onSocketDisconnected() {
+    console.log('[lappmodel] [onSocketDisconnected] disconnected!');
+  }
+
+  initSocketIO() {
+    console.log('[lappmodel] [initSocketIO] Try to connect!');
+    const socket = io.connect('http://localhost:5252/');
+    socket.on('connect', socket => {
+      console.log('[lappmodel] [initSocketIO] connected!');
+    });
+    socket.on('relay', this.onSocketDataRecv);
+    socket.on('disconnect', this.onSocketDisconnected);
+  }
+
   /**
    * コンストラクタ
    */
@@ -866,54 +886,28 @@ export class LAppModel extends CubismUserModel {
     this._idParamBodyAngleX = CubismFramework.getIdManager().getId(
       CubismDefaultParameterId.ParamBodyAngleX
     );
-    this._idParamHeadX = CubismFramework.getIdManager().getId(
-      'head_x'
-    );
-    this._idParamHeadY = CubismFramework.getIdManager().getId(
-      'head_y'
-    );
-    this._idParamHairX = CubismFramework.getIdManager().getId(
-      'hair_x'
-    );
-    this._idParamHairY = CubismFramework.getIdManager().getId(
-      'hair_y'
-    );
-    this._idParamBHairX = CubismFramework.getIdManager().getId(
-      'bhair_x'
-    );
-    this._idParamBHairY = CubismFramework.getIdManager().getId(
-      'bhair_y'
-    );
-    this._idParamLHairX = CubismFramework.getIdManager().getId(
-      'lhair_x'
-    );
-    this._idParamLHairY = CubismFramework.getIdManager().getId(
-      'lhair_y'
-    );
-    this._idParamRHairX = CubismFramework.getIdManager().getId(
-      'rhair_x'
-    );
-    this._idParamRHairY = CubismFramework.getIdManager().getId(
-      'rhair_y'
-    );
-    this._idParamLLHairX = CubismFramework.getIdManager().getId(
-      'llhair_x'
-    );
-    this._idParamLLHairY = CubismFramework.getIdManager().getId(
-      'llhair_y'
-    );
-    this._idParamRRHairX = CubismFramework.getIdManager().getId(
-      'rrhair_x'
-    );
-    this._idParamRRHairY = CubismFramework.getIdManager().getId(
-      'rrhair_y'
-    );
+    this._idParamHeadX = CubismFramework.getIdManager().getId('head_x');
+    this._idParamHeadY = CubismFramework.getIdManager().getId('head_y');
+    this._idParamHairX = CubismFramework.getIdManager().getId('hair_x');
+    this._idParamHairY = CubismFramework.getIdManager().getId('hair_y');
+    this._idParamBHairX = CubismFramework.getIdManager().getId('bhair_x');
+    this._idParamBHairY = CubismFramework.getIdManager().getId('bhair_y');
+    this._idParamLHairX = CubismFramework.getIdManager().getId('lhair_x');
+    this._idParamLHairY = CubismFramework.getIdManager().getId('lhair_y');
+    this._idParamRHairX = CubismFramework.getIdManager().getId('rhair_x');
+    this._idParamRHairY = CubismFramework.getIdManager().getId('rhair_y');
+    this._idParamLLHairX = CubismFramework.getIdManager().getId('llhair_x');
+    this._idParamLLHairY = CubismFramework.getIdManager().getId('llhair_y');
+    this._idParamRRHairX = CubismFramework.getIdManager().getId('rrhair_x');
+    this._idParamRRHairY = CubismFramework.getIdManager().getId('rrhair_y');
 
     this._state = LoadStep.LoadAssets;
     this._expressionCount = 0;
     this._textureCount = 0;
     this._motionCount = 0;
     this._allMotionCount = 0;
+
+    this.initSocketIO();
   }
 
   _modelSetting: ICubismModelSetting; // モデルセッティング情報
