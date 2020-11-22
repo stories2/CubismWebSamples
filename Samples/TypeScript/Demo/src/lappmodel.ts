@@ -885,7 +885,7 @@ export class LAppModel extends CubismUserModel {
       400
     );
     regX = Number(((regX - 0.5) * 2 * 4 * -1).toFixed(2));
-    regY = Number(((regY - 0.5) * 2 * 8 * -1).toFixed(2));
+    regY = Number(((regY - 0.5) * 2 * 8).toFixed(2));
     ctx.fillText(
       `CONV V: ${regY} H: ${regX}, W: ${bigBoxWidth}, H: ${bigBoxHeight}`,
       0,
