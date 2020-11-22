@@ -535,9 +535,9 @@ export class LAppModel extends CubismUserModel {
       this._custDragY * 1
     );
 
-    console.log(
-      `[lappmodel] [update] drag x: ${this._custDragX} y: ${this._custDragY}`
-    );
+    // console.log(
+    //   `[lappmodel] [update] drag x: ${this._custDragX} y: ${this._custDragY}`
+    // );
 
     this._model.addParameterValueById(
       this._idParamAngleZ,
@@ -860,7 +860,7 @@ export class LAppModel extends CubismUserModel {
   }
 
   onSocketDataRecv(data) {
-    console.log('[lappmodel] [onSocketDataRecv] data: ', data);
+    // console.log('[lappmodel] [onSocketDataRecv] data: ', data);
     if (data.length > 0) {
       this.drawLandmark(data);
       const bigBox = this.getBigBox(data);
@@ -884,8 +884,8 @@ export class LAppModel extends CubismUserModel {
       0,
       400
     );
-    regX = Number(((regX - 0.5) * 2 * 4).toFixed(2));
-    regY = Number(((regY - 0.5) * 2 * 8).toFixed(2));
+    regX = Number(((regX - 0.5) * 2 * 4 * -1).toFixed(2));
+    regY = Number(((regY - 0.5) * 2 * 8 * -1).toFixed(2));
     ctx.fillText(
       `CONV V: ${regY} H: ${regX}, W: ${bigBoxWidth}, H: ${bigBoxHeight}`,
       0,
