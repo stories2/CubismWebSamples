@@ -462,6 +462,11 @@ export class LAppModel extends CubismUserModel {
     this._dragX = this._dragManager.getX();
     this._dragY = this._dragManager.getY();
 
+    this._custDragX =
+      this._custDragX + (this._custDragAnimX - this._custDragX) / 16;
+    this._custDragY =
+      this._custDragY + (this._custDragAnimY - this._custDragY) / 16;
+
     // モーションによるパラメータ更新の有無
     let motionUpdated = false;
 
@@ -860,7 +865,9 @@ export class LAppModel extends CubismUserModel {
       this.drawLandmark(data);
       const bigBox = this.getBigBox(data);
       this.drawBigBox(bigBox);
-      this.calcFacePosition(data, bigBox);
+      const { regX, regY } = this.calcFacePosition(data, bigBox);
+      this._custDragAnimX = regX;
+      this._custDragAnimY = regY;
     }
   }
 
@@ -877,16 +884,17 @@ export class LAppModel extends CubismUserModel {
       0,
       400
     );
-    regX = Number(((regX - 0.5) * 2 * 2).toFixed(2));
-    regY = Number(((regY - 0.5) * 2 * 4).toFixed(2));
+    regX = Number(((regX - 0.5) * 2 * 4).toFixed(2));
+    regY = Number(((regY - 0.5) * 2 * 8).toFixed(2));
     ctx.fillText(
       `CONV V: ${regY} H: ${regX}, W: ${bigBoxWidth}, H: ${bigBoxHeight}`,
       0,
       450
     );
 
-    this._custDragX = regX;
-    this._custDragY = regY;
+    // this._custDragX = this._custDragX + (regX - this._custDragX) / 8;
+    // this._custDragY = this._custDragY + (regY - this._custDragY) / 8;
+    return { regX, regY };
   }
 
   getBigBox(data) {
@@ -1009,6 +1017,8 @@ export class LAppModel extends CubismUserModel {
 
     this._custDragX = 0;
     this._custDragY = 0;
+    this._custDragAnimX = 0;
+    this._custDragAnimY = 0;
 
     this.initSocketIO();
   }
@@ -1050,6 +1060,8 @@ export class LAppModel extends CubismUserModel {
 
   _custDragX: number;
   _custDragY: number;
+  _custDragAnimX: number;
+  _custDragAnimY: number;
 
   _state: number; // 現在のステータス管理用
   _expressionCount: number; // 表情データカウント
