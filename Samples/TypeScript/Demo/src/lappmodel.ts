@@ -43,7 +43,14 @@ import CubismModelSettingJson = cubismmodelsettingjson.CubismModelSettingJson;
 import CubismDefaultParameterId = cubismdefaultparameterid;
 
 import { LAppPal } from './lapppal';
-import { gl, canvas, frameBuffer, LAppDelegate } from './lappdelegate';
+import {
+  gl,
+  canvas,
+  frameBuffer,
+  LAppDelegate,
+  canvas2,
+  ctx
+} from './lappdelegate';
 import { TextureInfo } from './lapptexturemanager';
 import * as LAppDefine from './lappdefine';
 import 'whatwg-fetch';
@@ -833,6 +840,65 @@ export class LAppModel extends CubismUserModel {
 
   onSocketDataRecv(data) {
     console.log('[lappmodel] [onSocketDataRecv] data: ', data);
+    if (data.length > 0) {
+      this.drawLandmark(data);
+      const bigBox = this.getBigBox(data);
+      this.drawBigBox(bigBox);
+      const bigBoxWidth = bigBox.maxX - bigBox.minX;
+      const bigBoxHeight = bigBox.maxY - bigBox.minY;
+      const gapVertical =
+        bigBoxHeight - ((data[0][30].y + data[0][33].y) / 2 - bigBox.minY);
+      const gapHorizontal = bigBoxWidth - (data[0][30].x - bigBox.minX);
+      ctx.fillText(
+        `TEST V: ${(gapVertical / bigBoxHeight).toFixed(2)} H: ${(
+          gapHorizontal / bigBoxWidth
+        ).toFixed(2)}, W: ${bigBoxWidth}, H: ${bigBoxHeight}`,
+        0,
+        400
+      );
+    }
+  }
+
+  getBigBox(data) {
+    let minX = 987654321;
+    let minY = 987654321;
+    let maxX = -987654321;
+    let maxY = -987654321;
+    const size = 5;
+    data[0].forEach(dot => {
+      if (minX > dot.x) {
+        minX = dot.x;
+      }
+      if (minY > dot.y) {
+        minY = dot.y;
+      }
+      if (maxX < dot.x) {
+        maxX = dot.x;
+      }
+      if (maxY < dot.y) {
+        maxY = dot.y;
+      }
+    });
+    return { minX, minY, maxX, maxY };
+  }
+
+  drawBigBox(rect) {
+    ctx.strokeStyle = 'red';
+    ctx.strokeRect(
+      rect.minX,
+      rect.minY,
+      rect.maxX - rect.minX,
+      rect.maxY - rect.minY
+    );
+  }
+
+  drawLandmark(data) {
+    ctx.clearRect(0, 0, canvas2.width, canvas2.height);
+    ctx.fillStyle = 'black';
+    const size = 5;
+    data[0].forEach(dot => {
+      ctx.fillRect(dot.x - size / 2, dot.y - size / 2, size, size);
+    });
   }
 
   onSocketDisconnected() {
@@ -842,10 +908,14 @@ export class LAppModel extends CubismUserModel {
   initSocketIO() {
     console.log('[lappmodel] [initSocketIO] Try to connect!');
     const socket = io.connect('http://localhost:5252/');
+    const onSocketDataRecvBind = this.onSocketDataRecv;
+    onSocketDataRecvBind.bind(this);
     socket.on('connect', socket => {
       console.log('[lappmodel] [initSocketIO] connected!');
     });
-    socket.on('relay', this.onSocketDataRecv);
+    socket.on('relay', data => {
+      this.onSocketDataRecv(data);
+    });
     socket.on('disconnect', this.onSocketDisconnected);
   }
 
