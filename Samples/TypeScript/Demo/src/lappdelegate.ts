@@ -17,8 +17,10 @@ import { LAppLive2DManager } from './lapplive2dmanager';
 import * as LAppDefine from './lappdefine';
 
 export let canvas: HTMLCanvasElement = null;
+export let canvas2: HTMLCanvasElement = null;
 export let s_instance: LAppDelegate = null;
 export let gl: WebGLRenderingContext = null;
+export let ctx: CanvasRenderingContext2D = null;
 export let frameBuffer: WebGLFramebuffer = null;
 
 /**
@@ -60,11 +62,16 @@ export class LAppDelegate {
     canvas.width = LAppDefine.RenderTargetWidth;
     canvas.height = LAppDefine.RenderTargetHeight;
 
+    canvas2 = document.createElement('canvas');
+    canvas2.width = LAppDefine.RenderTargetWidth;
+    canvas2.height = LAppDefine.RenderTargetHeight;
+    ctx = canvas2.getContext('2d');
+
     // glコンテキストを初期化
     // @ts-ignore
     gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
 
-    if (!gl) {
+    if (!gl || !ctx) {
       alert('Cannot initialize WebGL. This browser does not support.');
       gl = null;
 
@@ -77,6 +84,7 @@ export class LAppDelegate {
 
     // キャンバスを DOM に追加
     document.body.appendChild(canvas);
+    document.body.appendChild(canvas2);
 
     if (!frameBuffer) {
       frameBuffer = gl.getParameter(gl.FRAMEBUFFER_BINDING);
