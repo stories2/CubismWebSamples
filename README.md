@@ -6,9 +6,66 @@ Cubism Web Framework および Live2D Cubism Core と組み合わせて使用し
 
 ## What i changed
 - Create my own character model and run with custom param
+- Get face landmark using dlib with python
+- Send face landmark data to socket.io server (Node.js)
+- Use face x,y instead of mouse x,y
 
-![result](sample.gif)
+![result](libeChanDemo.gif)
 
+## How to calculate face X, Y?
+
+### First, get total size of face for normalize face size.
+
+In `lappmodel.ts` method `getBigBox`
+
+```
+    data[0].forEach(dot => {
+      if (minX > dot.x) {
+        minX = dot.x;
+      }
+      if (minY > dot.y) {
+        minY = dot.y;
+      }
+      if (maxX < dot.x) {
+        maxX = dot.x;
+      }
+      if (maxY < dot.y) {
+        maxY = dot.y;
+      }
+    });
+```
+Get max x,y and min x,y for big size of face rect.
+
+### Second, get normalized center of face.
+![The-68](The-68-facial-landmarks-extracted-from-a-frontal-face-view.png)
+
+In my case i used point `31` for center of x and `31, 34` for center of y.
+
+```
+    const gapVertical =
+      bigBoxHeight - ((data[0][30].y + data[0][33].y) / 2 - bigBox.minY);
+    const gapHorizontal = bigBoxWidth - (data[0][30].x - bigBox.minX);
+```
+
+It will return `0 ~ 1` but in cubism mouse's range is `-1 ~ 1`.
+
+So, add some calc and threshold so that move face comfortable.
+```
+    regX = Number(((regX - 0.5) * 2 * 4 * -1).toFixed(2));
+    regY = Number(((regY - 0.5) * 2 * 8).toFixed(2));
+```
+
+### Thrid, Smooth movement
+
+If you use raw data of face position. It will move unnaturally.
+
+```
+    this._custDragX =
+      this._custDragX + (this._custDragAnimX - this._custDragX) / 16;
+    this._custDragY =
+      this._custDragY + (this._custDragAnimY - this._custDragY) / 16;
+```
+It will reach for latest face x,y slowly.
 
 ## ライセンス
 
