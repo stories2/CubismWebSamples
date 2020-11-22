@@ -497,26 +497,42 @@ export class LAppModel extends CubismUserModel {
 
     // ドラッグによる変化
     // ドラッグによる顔の向きの調整
-    this._model.addParameterValueById(this._idParamHeadX, this._dragX * 1);
-    this._model.addParameterValueById(this._idParamHeadY, this._dragY * 1);
+    this._model.addParameterValueById(this._idParamHeadX, this._custDragX * 1);
+    this._model.addParameterValueById(this._idParamHeadY, this._custDragY * 1);
 
-    this._model.addParameterValueById(this._idParamHairX, this._dragX * 1);
-    this._model.addParameterValueById(this._idParamHairY, this._dragY * 1);
+    this._model.addParameterValueById(this._idParamHairX, this._custDragX * 1);
+    this._model.addParameterValueById(this._idParamHairY, this._custDragY * 1);
 
-    this._model.addParameterValueById(this._idParamBHairX, this._dragX * 1);
-    this._model.addParameterValueById(this._idParamBHairY, this._dragY * 1);
+    this._model.addParameterValueById(this._idParamBHairX, this._custDragX * 1);
+    this._model.addParameterValueById(this._idParamBHairY, this._custDragY * 1);
 
-    this._model.addParameterValueById(this._idParamLHairX, this._dragX * 1);
-    this._model.addParameterValueById(this._idParamLHairY, this._dragY * 1);
+    this._model.addParameterValueById(this._idParamLHairX, this._custDragX * 1);
+    this._model.addParameterValueById(this._idParamLHairY, this._custDragY * 1);
 
-    this._model.addParameterValueById(this._idParamRHairX, this._dragX * 1); // -30から30の値を加える
-    this._model.addParameterValueById(this._idParamRHairY, this._dragY * 1);
+    this._model.addParameterValueById(this._idParamRHairX, this._custDragX * 1); // -30から30の値を加える
+    this._model.addParameterValueById(this._idParamRHairY, this._custDragY * 1);
 
-    this._model.addParameterValueById(this._idParamLLHairX, this._dragX * 1);
-    this._model.addParameterValueById(this._idParamLLHairY, this._dragY * 1);
+    this._model.addParameterValueById(
+      this._idParamLLHairX,
+      this._custDragX * 1
+    );
+    this._model.addParameterValueById(
+      this._idParamLLHairY,
+      this._custDragY * 1
+    );
 
-    this._model.addParameterValueById(this._idParamRRHairX, this._dragX * 1); // -30から30の値を加える
-    this._model.addParameterValueById(this._idParamRRHairY, this._dragY * 1);
+    this._model.addParameterValueById(
+      this._idParamRRHairX,
+      this._custDragX * 1
+    ); // -30から30の値を加える
+    this._model.addParameterValueById(
+      this._idParamRRHairY,
+      this._custDragY * 1
+    );
+
+    console.log(
+      `[lappmodel] [update] drag x: ${this._custDragX} y: ${this._custDragY}`
+    );
 
     this._model.addParameterValueById(
       this._idParamAngleZ,
@@ -844,19 +860,33 @@ export class LAppModel extends CubismUserModel {
       this.drawLandmark(data);
       const bigBox = this.getBigBox(data);
       this.drawBigBox(bigBox);
-      const bigBoxWidth = bigBox.maxX - bigBox.minX;
-      const bigBoxHeight = bigBox.maxY - bigBox.minY;
-      const gapVertical =
-        bigBoxHeight - ((data[0][30].y + data[0][33].y) / 2 - bigBox.minY);
-      const gapHorizontal = bigBoxWidth - (data[0][30].x - bigBox.minX);
-      ctx.fillText(
-        `TEST V: ${(gapVertical / bigBoxHeight).toFixed(2)} H: ${(
-          gapHorizontal / bigBoxWidth
-        ).toFixed(2)}, W: ${bigBoxWidth}, H: ${bigBoxHeight}`,
-        0,
-        400
-      );
+      this.calcFacePosition(data, bigBox);
     }
+  }
+
+  calcFacePosition(data, bigBox) {
+    const bigBoxWidth = bigBox.maxX - bigBox.minX;
+    const bigBoxHeight = bigBox.maxY - bigBox.minY;
+    const gapVertical =
+      bigBoxHeight - ((data[0][30].y + data[0][33].y) / 2 - bigBox.minY);
+    const gapHorizontal = bigBoxWidth - (data[0][30].x - bigBox.minX);
+    let regY = Number((gapVertical / bigBoxHeight).toFixed(2));
+    let regX = Number((gapHorizontal / bigBoxWidth).toFixed(2));
+    ctx.fillText(
+      `TEST V: ${regY} H: ${regX}, W: ${bigBoxWidth}, H: ${bigBoxHeight}`,
+      0,
+      400
+    );
+    regX = Number(((regX - 0.5) * 2 * 2).toFixed(2));
+    regY = Number(((regY - 0.5) * 2 * 4).toFixed(2));
+    ctx.fillText(
+      `CONV V: ${regY} H: ${regX}, W: ${bigBoxWidth}, H: ${bigBoxHeight}`,
+      0,
+      450
+    );
+
+    this._custDragX = regX;
+    this._custDragY = regY;
   }
 
   getBigBox(data) {
@@ -977,6 +1007,9 @@ export class LAppModel extends CubismUserModel {
     this._motionCount = 0;
     this._allMotionCount = 0;
 
+    this._custDragX = 0;
+    this._custDragY = 0;
+
     this.initSocketIO();
   }
 
@@ -1014,6 +1047,9 @@ export class LAppModel extends CubismUserModel {
   _idParamLLHairY: CubismIdHandle; // ID: llhair_y
   _idParamRRHairX: CubismIdHandle; // ID: rrhair_x
   _idParamRRHairY: CubismIdHandle; // ID: rrhair_y
+
+  _custDragX: number;
+  _custDragY: number;
 
   _state: number; // 現在のステータス管理用
   _expressionCount: number; // 表情データカウント
